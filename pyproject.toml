@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "model_datasets"
+version = "0.1.0"
+description = "A utility for interacting with model input and output datasets."
+authors = [
+    { name = "Chris Cox", email = "christopher.cox@student.nmt.edu" }
+]
+dependencies = [
+    "pandas",
+    "xarray",
+    "netCDF4"
+]
