@@ -77,7 +77,7 @@ class LM4ModelOutput:
         # For land_month, can use method on existing diagnostic
         if diag == 'land_month':
             land_month = self.load_diagnostic('land_month')
-            return land_month['time'].to_datetimeindex()
+            return land_month['time'].to_index().to_datetimeindex()
 
         # Else land_daily
         # Get the first time coordinate from the daily dataset
@@ -107,34 +107,35 @@ class LM4ModelOutput:
         '''
         diagnostic = self.load_diagnostic(diag)
 
-        # While I am developing this, I will only allow certain variables in certain diagnostics.
-        not_implemented = []
-        if diag == 'land_daily':
-            not_implemented = ['swup_dir', 'swup_dif', 'swdn_dir', 'swdn_dif', 'average_T1','average_T2','average_DT','time_bnds']
-        else:
-            ValueError(f"Diagnostic '{diag}' is not supported in this method. Please use get_variables() to explore available variables.")
-
         # Extract data depending on the variable type
-        variable_groups = {
-            'soil': ['soil_T'],
-            'radiation': ['swup_dir', 'swup_dif', 'swdn_dir', 'swdn_dif'],
-        }
         data_groups = {
             'normal': [],
             'soil': [],
             'radiation': [],
             }
         for var in vars:
-            if var in not_implemented:
-                ValueError(f"Variable '{var}' is not yet supported in this method. Please use get_variables() to explore available variables.")
-            if var in variable_groups['soil']:
-                # Remove 'soil_T' from the list of variables, it will be handled separately
+            # Check if the variable is in the diagnostic dataset
+            if var not in diagnostic.data_vars:
+                # Variable will not be included in the output, give a warning
+                print(f"Warning: Variable '{var}' not found in diagnostic '{diag}'. It will not be included in the output.")
+                continue
+            
+            # Check the dimensions of the variable to determine its type
+            if 'zfull_soil' in diagnostic[var].dims:
+                # This is a soil variable, it will be handled separately
                 data_groups['soil'].append(var)
-            elif var in variable_groups['radiation']:
-                # Remove radiation variables from the list, they will be handled separately
+
+            elif 'band' in diagnostic[var].dims:
+                # This is a radiation variable, it will be handled separately
                 data_groups['radiation'].append(var)
-            else:
+
+            elif 'grid_index' in diagnostic[var].dims and 'time' in diagnostic[var].dims:
+                # This is a normal variable, it will be handled normally
                 data_groups['normal'].append(var)
+
+            else:
+                # This variable isn't currently implemented, give a warning
+                print(f"Warning: Variable '{var}' has unsupported dimensions {diagnostic[var].dims}. It will not be included in the output.")
 
         # Extract data for each group and combine
         data_frames = []
@@ -155,7 +156,8 @@ class LM4ModelOutput:
                 data_frames.append(soil_data)
 
         if data_groups['radiation']:
-            pass  # Radiation variables are not yet implemented
+            # Not yet implemented, give warning
+            print(f"Warning: Radiation variables {data_groups['radiation']} are not yet implemented. They will not be included in the output.")
 
         # Combine all data frames into a single DataFrame
         if data_frames:
