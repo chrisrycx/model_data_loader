@@ -24,7 +24,7 @@ class LM4ModelOutput:
 
         # Construct the path to the output history folder
         if spinup:
-            self.history_path = os.path.join(OUTPUT_PATH, self.site, f'{self.site}_spinup_s{forcing_string}_v{version}','history')
+            self.history_path = os.path.join(OUTPUT_PATH, self.site, f'{self.site}_spinup_v{version}','history')
         else:
             self.history_path = os.path.join(OUTPUT_PATH, self.site, f'{self.site}_s{forcing_string}_v{version}','history')
 

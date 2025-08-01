@@ -24,9 +24,9 @@ class LM4Forcing:
         
         # Construct the path to the forcing dataset
         if spinup:
-            self.forcing_path = os.path.join(FORCING_PATH, self.site, f'{self.site}_spinup_s{forcing_string}_v{version}.nc')
+            self.forcing_path = os.path.join(FORCING_PATH, self.site, f'{self.site}_spinup_v{version}.nc')
         else:
-            self.forcing_path = os.path.join(FORCING_PATH, self.site, f'{self.site}_s{forcing_string}_v{version}.nc')
+            self.forcing_path = os.path.join(FORCING_PATH, self.site, f'{self.site}_forcing_s{forcing_string}_v{version}.nc')
 
         # Open the forcing dataset
         self.netcdf = xr.open_dataset(self.forcing_path)
