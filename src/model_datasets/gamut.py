@@ -72,7 +72,6 @@ class GamutDataset:
         site_id = f'LR_{site_abbrev[self.site]}_C_'
         file_meta = 'SourceID_1_QC_1.csv'
         for filename in filenames:
-            print(f"Processing file: {filename}")
             if filename.startswith(site_id) and filename.endswith(file_meta):
                 variable_name = filename[len(site_id):-len(file_meta)-1]
                 variables.append(variable_name)
@@ -95,7 +94,13 @@ class GamutDataset:
         # Extract just the relevant columns
         data = rawdf[variable]
 
+        # Ensure data types is float
+        data = data.astype(float)
+
         # All GAMUT data has a constant offset of 7 from UTC
         data.index = data.index + pd.Timedelta(hours=7)
+
+        # Replace -9999 with NaN
+        data.replace(-9999, pd.NA, inplace=True)
 
         return data
