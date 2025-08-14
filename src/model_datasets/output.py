@@ -12,7 +12,7 @@ if OUTPUT_PATH is None:
 
 # Model Output Dataset
 class LM4ModelOutput:
-    def __init__(self, site: str, forcing_string: str, version:str, spinup=False):
+    def __init__(self, site: str, forcing_string: str, namelist: str, version:str, spinup=False):
         '''
         Load a model output dataset.
         :param site: Site name (e.g., 'Tony Grove RS'). Can use Snotel or model name.
@@ -24,9 +24,9 @@ class LM4ModelOutput:
 
         # Construct the path to the output history folder
         if spinup:
-            self.history_path = os.path.join(OUTPUT_PATH, self.site, f'{self.site}_spinup_v{version}','history')
+            self.history_path = os.path.join(OUTPUT_PATH, self.site, f'{self.site}_spinup_{namelist}_v{version}','history')
         else:
-            self.history_path = os.path.join(OUTPUT_PATH, self.site, f'{self.site}_s{forcing_string}_v{version}','history')
+            self.history_path = os.path.join(OUTPUT_PATH, self.site, f'{self.site}_s{forcing_string}_{namelist}_v{version}','history')
 
         # Initialize dictionary to hold diagnostic datasets
         self.diagnostics = {}
