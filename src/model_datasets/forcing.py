@@ -56,6 +56,21 @@ class LM4Forcing:
         # Convert to series and set the index to the 'time' dimension
         return self.netcdf[var_name].isel(latitude=0, longitude=0).to_series()
     
+    def get_flags(self, var_name: str) -> pd.Series:
+        '''
+        Get flags for a specific variable.
+        :param var_name: Name of the variable to retrieve
+        :return: Pandas Series with the flags for the specified variable
+        '''
+        if var_name not in self.netcdf.data_vars:
+            raise ValueError(f"Variable '{var_name}' not found in the dataset.")
+        
+        flag_name = var_name + '_flag'
+        if flag_name not in self.netcdf.data_vars:
+            raise ValueError(f"Flag variable '{flag_name}' not found in the dataset.")
+
+        # Convert to series and set the index to the 'time' dimension
+        return self.netcdf[flag_name].isel(latitude=0, longitude=0).to_series()
     
     def get_looped_data(self, var_name: str, spin_up_years: int) -> pd.Series:
         '''
