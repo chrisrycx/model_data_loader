@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "model_datasets"
-version = "0.2.0"
+version = "0.2.1"
 description = "A utility for interacting with model input and output datasets."
 authors = [
     { name = "Chris Cox", email = "christopher.cox@student.nmt.edu" }

@@ -6,9 +6,9 @@ import pandas as pd
 import xarray as xr
 
 # Load paths from environment variables
-OUTPUT_PATH = os.getenv('OUTPUT_PATH', None)
+OUTPUT_PATH = os.getenv('MODEL_OUTPUT_PATH', None)
 if OUTPUT_PATH is None:
-    raise ValueError("OUTPUT_PATH environment variable is not set. Please set it to the model output directory.")
+    raise ValueError("MODEL_OUTPUT_PATH environment variable is not set. Please set it to the model output directory.")
 
 # Model Output Dataset
 class LM4ModelOutput:
