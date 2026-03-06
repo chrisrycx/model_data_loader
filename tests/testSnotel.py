@@ -4,7 +4,7 @@ Must set an environment variable PNNL_DATA_PATH to the location of the PNNL data
 '''
 
 import unittest
-from buildforcing.datasets import PNNLSnotel
+from model_datasets.snotel import PNNLSnotel
 import os
 
 class TestPNNLSnotel(unittest.TestCase):
